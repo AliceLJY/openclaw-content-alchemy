@@ -18,11 +18,24 @@ User (Discord) → OpenClaw Bot → Claude Code (local) → WeChat
                      ├── Step 1: CC writes article (Content Alchemy Stages 1-5)
                      ├── Step 1.5: User confirms angle/framework (mobile-friendly)
                      ├── Step 2: Bot generates illustrations (auto style rotation)
+                     │            ├─ Gemini-based bot: generate directly (no dispatch needed)
+                     │            └─ Other models: dispatch to Gemini Image API via script
                      ├── Step 3: CC embeds images + publishes to WeChat
                      └── Login check before publish (abort if not logged in)
 ```
 
 > 用户通过 Discord 发指令 → Bot 调度 → CC 本地写稿 → 用户手机确认 → Bot 配图 → CC 嵌图发布
+
+### Image Generation — Two Modes
+
+| Bot Model | Image Gen Mode | How |
+|-----------|---------------|-----|
+| Gemini-based (e.g. Gemini Pro 3) | **Direct** — bot calls the script itself | `exec` → `generate-image.mjs` → Gemini Image API |
+| Non-Gemini (e.g. Claude Opus) | **Dispatched** — bot delegates to the script as a sub-task | Bot → `generate-image.mjs` → Gemini Image API |
+
+> If your bot already runs on Gemini, it can generate images directly without dispatching to another agent — same API, zero overhead.
+>
+> 如果你的 bot 本身就跑在 Gemini 上，生图不需要转发给子 agent——同一个 API，零额外开销。
 
 ## Style Catalog — 56 Art Styles
 
@@ -126,4 +139,4 @@ See [style-catalog.md](style-catalog.md) for the full list with prompt suffixes.
 
 ---
 
-*Built with [Content Alchemy](https://github.com/AliceLJY/content-alchemy) and battle-tested by AntiBot.*
+*Built with [Content Alchemy](https://github.com/AliceLJY/content-alchemy) and battle-tested by AntiBot (Opus 4.6) & 睿智bot (Gemini Pro 3).*
