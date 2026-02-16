@@ -83,9 +83,9 @@ See [style-catalog.md](style-catalog.md) for the full list with prompt suffixes.
 
 ## Origin Story
 
-> This project was born from real production pain. After weeks of manually choosing illustration styles for a WeChat Official Account ("我的AI小木屋"), the author — who studied art history at the Chinese National Academy of Arts — decided to systematize the entire art history into a machine-readable style catalog. Combined with the OpenClaw bot orchestration pipeline, it became a fully automated content publishing system.
+> This project was born from real production pain. After weeks of manually choosing illustration styles for a WeChat Official Account, it became clear that style selection should be automated — not random, but informed by art history and matched to article tone. Combined with the OpenClaw bot orchestration pipeline, it became a fully automated content publishing system.
 >
-> 这个项目来自实战踩坑。公众号「我的AI小木屋」连续写了几十篇文章后，每次手选配图风格实在太累。作者在中国艺术研究院进修过美术史，索性把整部美术史梳理成机器可读的风格目录，再结合 OpenClaw bot 编排管道，做成了全自动内容发布系统。
+> 这个项目来自实战踩坑。公众号连续写了几十篇文章后，每次手选配图风格实在太累，索性把美术史梳理成机器可读的风格目录，再结合 OpenClaw bot 编排管道，做成了全自动内容发布系统。
 
 **Original work by [AliceLJY](https://github.com/AliceLJY)**:
 - 56-style catalog with art-historical classification and AI prompt engineering
