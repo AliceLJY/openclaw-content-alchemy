@@ -6,25 +6,59 @@
 
 ## What Is This?
 
-A ready-to-use configuration kit for [OpenClaw](https://github.com/openclaw/openclaw) bots that want to write, illustrate, and publish articles — powered by Claude Code as the local execution engine.
+A ready-to-use configuration kit for [OpenClaw](https://github.com/openclaw/openclaw) bots that want to write, illustrate, and publish articles. Supports three publishing modes — from full Claude Code integration to **fully CC-Free** operation.
 
-> 一套开箱即用的 OpenClaw bot 配置方案，让 bot 能写文章、配图、发布到微信公众号。底层通过本地 Claude Code 执行实际任务。
+> 一套开箱即用的 OpenClaw bot 配置方案，让 bot 能写文章、配图、发布到微信公众号。支持三种发布模式——从完整 CC 集成到**完全不依赖 CC**。
 
-## Architecture
+## Architecture — Three Publishing Modes
+
+### Mode A: Full CC (Bot + Claude Code)
 
 ```
-User (Discord) → OpenClaw Bot → Claude Code (local) → WeChat
-                     │
-                     ├── Step 1: CC writes article (Content Alchemy Stages 1-5)
-                     ├── Step 1.5: User confirms angle/framework (mobile-friendly)
-                     ├── Step 2: Bot generates illustrations (auto style rotation)
-                     │            ├─ Gemini-based bot: generate directly (no dispatch needed)
-                     │            └─ Other models: dispatch to Gemini Image API via script
-                     ├── Step 3: CC embeds images + publishes to WeChat
-                     └── Login check before publish (abort if not logged in)
+User → Bot → CC writes article → User confirms → Bot generates images → CC embeds + publishes
 ```
 
-> 用户通过 Discord 发指令 → Bot 调度 → CC 本地写稿 → 用户手机确认 → Bot 配图 → CC 嵌图发布
+> Bot 调度 CC 写稿 → 用户手机确认 → Bot 配图 → CC 嵌图发布
+
+### Mode B: Hybrid (Bot + CC for writing, Worker for publishing)
+
+```
+User → Bot → CC writes article → User confirms → Bot generates images → Worker publishes
+                                                                          (shell commands,
+                                                                           no CC needed)
+```
+
+> CC 只负责写稿，发布环节直接走 Worker shell 命令，不启动 CC
+
+### Mode C: CC-Free (Bot + Worker only, no Claude Code at all)
+
+```
+User → Bot writes article → User confirms → Bot generates images → Worker publishes
+         (bot's own LLM)                      (Gemini API)           (shell commands)
+```
+
+> 全程不需要 CC。Bot 自己的模型写稿，Gemini 生图，Worker 跑 shell 命令发布。适合没有 Claude Code 的用户。
+
+### CC-Free Publishing — How It Works
+
+Instead of dispatching to Claude Code, the bot calls the Worker's `/tasks` endpoint to run shell commands directly:
+
+> 不启动 CC，bot 直接调 Worker 的 `/tasks` 端点执行 shell 命令：
+
+```
+# Step 1: Copy images + replace placeholders (sed)
+POST /tasks → { "command": "cp images && sed -i '' 's|{{IMAGE_COVER}}|![](images/IMAGE_COVER.png)|g' article.md" }
+
+# Step 2: Run publish script
+POST /tasks → { "command": "bun baoyu-post-to-wechat/scripts/wechat-article.ts --markdown article.md --theme grace" }
+
+# Step 3: Cleanup
+POST /tasks → { "command": "mv article-dir ~/.Trash/" }
+```
+
+**Key difference**: `/tasks` has no callback — bot must poll `GET /tasks/{taskId}?wait=120000` for results.
+
+> **关键区别**：`/tasks` 没有回调机制，bot 需要轮询 GET 拿结果。
 
 ### Image Generation — Two Modes
 
@@ -83,7 +117,7 @@ See [style-catalog.md](style-catalog.md) for the full list with prompt suffixes.
 | **OS** | macOS (Apple Silicon) | Linux should work; Windows needs clipboard adaptation (no `osascript`) |
 | **Main Agent Model** | Claude Opus 4.6 (via Anthropic token) | Any model with tool use: Sonnet 4.5, Gemini Pro 3, etc. |
 | **Image Gen Model** | Gemini (via API + CDP fallback) | Any model with image output capability |
-| **Claude Code** | Claude Code CLI (local) | Required — the executor engine |
+| **Claude Code** | Claude Code CLI (local) | **Optional** — required for Mode A/B, not needed for CC-Free (Mode C) |
 | **Runtime** | Bun (TypeScript) | Node.js may work but untested |
 | **Browser** | Chrome 144+ with CDP (port 9222) | Chromium-based browsers with remote debugging |
 
@@ -103,8 +137,8 @@ See [style-catalog.md](style-catalog.md) for the full list with prompt suffixes.
 |-----------|---------|------|
 | OpenClaw bot | Discord bot framework | [openclaw](https://github.com/openclaw/openclaw) |
 | openclaw-worker | Task API bridge (CC ↔ Bot) | [openclaw-worker](https://github.com/AliceLJY/openclaw-worker) |
-| openclaw-cc-pipeline | Multi-turn CC orchestration skill (Bot → API → Worker → CC → Callback) | [openclaw-cc-pipeline](https://github.com/AliceLJY/openclaw-cc-pipeline) |
-| Content Alchemy | Article writing skill for Claude Code | [content-alchemy](https://github.com/AliceLJY/content-alchemy) |
+| openclaw-cc-pipeline | Multi-turn CC orchestration skill (Mode A/B only) | [openclaw-cc-pipeline](https://github.com/AliceLJY/openclaw-cc-pipeline) |
+| Content Alchemy | Article writing skill for Claude Code (Mode A/B only) | [content-alchemy](https://github.com/AliceLJY/content-alchemy) |
 | Chrome + CDP | WeChat publishing automation | Port 9222 debug mode |
 
 ## Quick Start
@@ -129,7 +163,8 @@ See [style-catalog.md](style-catalog.md) for the full list with prompt suffixes.
 - 56-style catalog with art-historical classification and AI prompt engineering
 - Auto-rotation algorithm with tone matching and history-based deduplication
 - Bot article workflow with mobile-friendly confirmation checkpoints
-- WeChat login pre-check to avoid wasting API quota
+- CC-Free publishing mode — run the full pipeline without Claude Code
+- WeChat login pre-check to avoid wasting API quota (CC mode)
 
 > All style prompt suffixes are hand-crafted based on art history knowledge, not copy-pasted from generic prompt databases. The combination rules are tested with Gemini image generation.
 
@@ -139,4 +174,4 @@ See [style-catalog.md](style-catalog.md) for the full list with prompt suffixes.
 
 ---
 
-*Built with [Content Alchemy](https://github.com/AliceLJY/content-alchemy) and battle-tested by AntiBot (Opus 4.6) & 睿智bot (Gemini Pro 3).*
+*Built with [Content Alchemy](https://github.com/AliceLJY/content-alchemy) and battle-tested by AntiBot (Opus 4.6) & 睿智bot (Gemini Pro 3). CC-Free mode verified 2026-02-16.*
