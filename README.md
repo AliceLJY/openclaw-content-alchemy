@@ -81,9 +81,23 @@ See [style-catalog.md](style-catalog.md) for the full list with prompt suffixes.
 > 3. 把 bot-workflow.md 的流程写入 bot 的 MEMORY.md
 > 4. 对 bot 说："写一篇关于 [话题] 的文章"
 
+## Origin Story
+
+> This project was born from real production pain. After weeks of manually choosing illustration styles for a WeChat Official Account ("我的AI小木屋"), the author — who studied art history at the Chinese National Academy of Arts — decided to systematize the entire art history into a machine-readable style catalog. Combined with the OpenClaw bot orchestration pipeline, it became a fully automated content publishing system.
+>
+> 这个项目来自实战踩坑。公众号「我的AI小木屋」连续写了几十篇文章后，每次手选配图风格实在太累。作者在中国艺术研究院进修过美术史，索性把整部美术史梳理成机器可读的风格目录，再结合 OpenClaw bot 编排管道，做成了全自动内容发布系统。
+
+**Original work by [AliceLJY](https://github.com/AliceLJY)**:
+- 56-style catalog with art-historical classification and AI prompt engineering
+- Auto-rotation algorithm with tone matching and history-based deduplication
+- Bot article workflow with mobile-friendly confirmation checkpoints
+- WeChat login pre-check to avoid wasting API quota
+
+> All style prompt suffixes are hand-crafted based on art history knowledge, not copy-pasted from generic prompt databases. The combination rules are tested with Gemini image generation.
+
 ## License
 
-MIT
+[MIT](LICENSE)
 
 ---
 
