@@ -59,6 +59,31 @@ See [style-catalog.md](style-catalog.md) for the full list with prompt suffixes.
 | [bot-workflow.md](bot-workflow.md) | Complete bot article workflow (Step 1 → 1.5 → 2 → 3) |
 | [pipeline-reference.md](pipeline-reference.md) | Technical references to related repos |
 
+## Tested Environment
+
+> This is the setup we run in production. Other combinations may work but are not tested.
+>
+> 以下是实际生产环境。其他组合可能可以用但没测过。
+
+| Item | Our Setup | Alternatives |
+|------|-----------|-------------|
+| **OS** | macOS (Apple Silicon) | Linux should work; Windows needs clipboard adaptation (no `osascript`) |
+| **Main Agent Model** | Claude Opus 4.6 (via Anthropic token) | Any model with tool use: Sonnet 4.5, Gemini Pro 3, etc. |
+| **Image Gen Model** | Gemini (via API + CDP fallback) | Any model with image output capability |
+| **Claude Code** | Claude Code CLI (local) | Required — the executor engine |
+| **Runtime** | Bun (TypeScript) | Node.js may work but untested |
+| **Browser** | Chrome 144+ with CDP (port 9222) | Chromium-based browsers with remote debugging |
+
+### Platform Notes
+
+> **macOS-specific**: WeChat publishing uses `osascript` for clipboard operations (Cmd+C/V). On Linux/Windows, this part needs a platform-specific clipboard tool (e.g., `xclip`, `powershell`).
+>
+> **macOS 专属**：微信发布用 `osascript` 操作剪贴板。Linux/Windows 需要替换为对应的剪贴板工具。
+
+> **Chrome LaunchAgent**: We use a macOS LaunchAgent to keep a headless Chrome running on port 9222. On Linux, use `systemd` service; on Windows, use Task Scheduler.
+>
+> **Chrome 常驻**：macOS 用 LaunchAgent 保持 Chrome 调试端口常开。Linux 用 systemd，Windows 用任务计划程序。
+
 ## Prerequisites
 
 | Component | Purpose | Link |
