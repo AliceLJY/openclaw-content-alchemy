@@ -65,6 +65,7 @@ See [style-catalog.md](style-catalog.md) for the full list with prompt suffixes.
 |-----------|---------|------|
 | OpenClaw bot | Discord bot framework | [openclaw](https://github.com/openclaw/openclaw) |
 | openclaw-worker | Task API bridge (CC ↔ Bot) | [openclaw-worker](https://github.com/AliceLJY/openclaw-worker) |
+| openclaw-cc-pipeline | Multi-turn CC orchestration skill (Bot → API → Worker → CC → Callback) | [openclaw-cc-pipeline](https://github.com/AliceLJY/openclaw-cc-pipeline) |
 | Content Alchemy | Article writing skill for Claude Code | [content-alchemy](https://github.com/AliceLJY/content-alchemy) |
 | Chrome + CDP | WeChat publishing automation | Port 9222 debug mode |
 
