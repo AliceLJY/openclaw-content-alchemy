@@ -79,9 +79,9 @@ After CC finishes, tell the user:
 
 ---
 
-## Step 2: Bot Generates Illustrations (Auto Style Rotation)
+## Step 2: Bot Generates Illustrations (Auto Style Rotation + nano Enhancement)
 
-> Bot 自动选风格、生图。56种风格自动轮换，不重复最近5次用过的。
+> Bot 自动选风格 + nano 增强 prompt、生图。56种风格自动轮换，nano-banana-pro 强制一起用，不问用户。
 
 ### Style Selection Logic
 
@@ -93,11 +93,26 @@ After CC finishes, tell the user:
 6. After generation, append to `style-history.txt`: `{date} {slug} {style-name}`
 7. Keep only the last 20 entries in history
 
+### nano-banana-pro Prompt Enhancement (mandatory)
+
+> 风格选完后，**必须**用 nano-banana-pro 参考库增强 prompt，不可跳过。
+
+1. Extract visual keywords from the article (scene, mood, objects)
+2. Search `nano-banana-pro-prompts-recommend-skill/references/` for matching reference prompts (11 categories: social-media-post, poster-flyer, comic-storyboard, etc.)
+3. Borrow structure from reference prompts (scene description, lighting, composition, camera angle)
+4. Fuse with selected style suffix into final prompt
+
+**Final prompt format:**
+
+```
+[主题场景描述], [56风格英文prompt后缀], [nano参考库的增强元素(灯光/构图/镜头等)]
+```
+
 ### Image Generation
 
 ```bash
 node /home/node/.openclaw/workspace/scripts/generate-image.mjs \
-  --prompt "{image.prompt_en}, {selected style prompt suffix}" \
+  --prompt "{final enhanced prompt}" \
   --output "/home/node/.openclaw/workspace/images/{slug}/{placeholder}.png"
 ```
 
@@ -153,7 +168,7 @@ node /home/node/.openclaw/workspace/scripts/generate-image.mjs \
 |---|------|-----|
 | 1 | **Bot is dispatcher** | Articles are written by CC, not the bot |
 | 2 | **Confirm angle first** | Step 1.5 — wait for user mobile confirmation |
-| 3 | **Auto-rotate styles** | Match tone + exclude recent — announce but don't wait |
+| 3 | **Auto-rotate styles + nano** | Style rotation and nano prompt enhancement are bundled — always both, never skip nano |
 | 4 | **Check login before publish** | No login = stop immediately, save quota |
 | 5 | **No auto-retry on failure** | Tell user, let them decide |
 | 6 | **Always set callbackContainer** | Prevents callbacks going to wrong bot |
