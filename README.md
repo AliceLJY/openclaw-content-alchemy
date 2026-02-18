@@ -106,20 +106,18 @@ See [style-catalog.md](style-catalog.md) for the full list with prompt suffixes.
 | [bot-workflow.md](bot-workflow.md) | Complete bot article workflow (Step 1 → 1.5 → 2 → 3) |
 | [pipeline-reference.md](pipeline-reference.md) | Technical references to related repos |
 
-## Tested Environment
+## Author's Setup
 
-> This is the setup we run in production. Other combinations may work but are not tested.
->
-> 以下是实际生产环境。其他组合可能可以用但没测过。
+> 作者的开发环境，仅供参考，你可以用自己喜欢的工具替代
 
-| Item | Our Setup | Alternatives |
-|------|-----------|-------------|
-| **OS** | macOS (Apple Silicon) | Linux should work; Windows needs clipboard adaptation (no `osascript`) |
-| **Main Agent Model** | Claude Opus 4.6 (via Anthropic token) | Any model with tool use: Sonnet 4.5, Gemini Pro 3, etc. |
-| **Image Gen Model** | Gemini (via API + CDP fallback) | Any model with image output capability |
-| **Claude Code** | Claude Code CLI (local) | **Optional** — required for Mode A/B, not needed for CC-Free (Mode C) |
-| **Runtime** | Bun (TypeScript) | Node.js may work but untested |
-| **Browser** | Chrome 144+ with CDP (port 9222) | Chromium-based browsers with remote debugging |
+| Item | Setup |
+|------|-------|
+| **Hardware** | MacBook Air M4, 16GB RAM |
+| **Models** | Claude Opus 4.6 (primary), Gemini Pro 3 (secondary), MiniMax M2.5 (scheduled tasks) |
+| **Runtime** | Bun, Docker |
+| **API** | [OpenClaw](https://github.com/openclaw/openclaw) subscription |
+
+*Author's setup — yours may differ.*
 
 ### Platform Notes
 
@@ -168,22 +166,25 @@ See [style-catalog.md](style-catalog.md) for the full list with prompt suffixes.
 
 > All style prompt suffixes are hand-crafted based on art history knowledge, not copy-pasted from generic prompt databases. The combination rules are tested with Gemini image generation.
 
+## Ecosystem
+
+> 这些项目配合使用效果更好
+
+| Project | What It Does |
+|---------|-------------|
+| [content-alchemy](https://github.com/AliceLJY/content-alchemy) | 7-stage content pipeline skill — the core workflow engine |
+| [digital-clone-skill](https://github.com/AliceLJY/digital-clone-skill) | Extract writing DNA to personalize your content voice |
+
 ## Author
 
-Built by **小试AI** ([@AliceLJY](https://github.com/AliceLJY)) · WeChat Official Account: **我的AI小木屋**
+Built by **小试AI** ([@AliceLJY](https://github.com/AliceLJY)) · WeChat: **我的AI小木屋**
 
 > 医学出身，文化口工作，AI 野路子。公众号四大板块：AI实操手账 · AI踩坑实录 · AI照见众生 · AI随心分享
 
 Four content pillars: **Hands-on AI** · **AI Pitfall Diaries** · **AI & Humanity** · **AI Gallery**
-
-Open-source byproducts: [content-alchemy](https://github.com/AliceLJY/content-alchemy) · [openclaw-worker](https://github.com/AliceLJY/openclaw-worker) · [openclaw-cc-pipeline](https://github.com/AliceLJY/openclaw-cc-pipeline) · [openclaw-content-alchemy](https://github.com/AliceLJY/openclaw-content-alchemy) · [digital-clone-skill](https://github.com/AliceLJY/digital-clone-skill)
 
 <img src="./assets/wechat_qr.jpg" width="200" alt="WeChat QR Code">
 
 ## License
 
 [MIT](LICENSE)
-
----
-
-*Built with [Content Alchemy](https://github.com/AliceLJY/content-alchemy) and battle-tested by AntiBot (Opus 4.6) & 睿智bot (Gemini Pro 3). CC-Free mode verified 2026-02-16.*
