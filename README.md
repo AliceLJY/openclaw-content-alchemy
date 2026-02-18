@@ -117,7 +117,7 @@ See [style-catalog.md](style-catalog.md) for the full list with prompt suffixes.
 | **Runtime** | Bun, Docker |
 | **API** | [OpenClaw](https://github.com/openclaw/openclaw) subscription |
 
-*Author's setup — yours may differ.*
+> Author's setup — yours may differ.
 
 ### Platform Notes
 
