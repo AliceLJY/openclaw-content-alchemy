@@ -8,7 +8,8 @@
 
 | Repo | Purpose | Link |
 |------|---------|------|
-| **content-alchemy** | Claude Code skill for article writing (7-stage pipeline) | [GitHub](https://github.com/AliceLJY/content-alchemy) |
+| **content-alchemy** | Claude Code skill for article writing (5-stage pipeline, v5.0) | [GitHub](https://github.com/AliceLJY/content-alchemy) |
+| **content-publisher** | Image generation, layout formatting, and WeChat publishing pipeline | [GitHub](https://github.com/AliceLJY/content-publisher) |
 | **openclaw-worker** | Task API bridge between Discord bot and local Claude Code | [GitHub](https://github.com/AliceLJY/openclaw-worker) |
 | **openclaw-cc-pipeline** | Multi-turn Claude Code orchestration skill — the core pattern: Bot dispatches → Task API relays → Worker runs → CC executes → Callback delivers result. Install as a Claude Code skill for session persistence and multi-round workflows | [GitHub](https://github.com/AliceLJY/openclaw-cc-pipeline) |
 
@@ -40,8 +41,9 @@
 
 ### WeChat Publishing
 
-- Script: `baoyu-post-to-wechat` (via content-alchemy dependencies)
-- Connects to Chrome CDP port 9222
-- Converts Markdown → styled HTML → clipboard paste
-- Image placeholders: `![](images/file.png)` → `WECHATIMGPH_N` → actual images
-- Requires visible Chrome window (uses `osascript` for clipboard on macOS)
+- Script: `content-publisher/scripts/publish-wechat.ts` (pure HTTP API mode, no Chrome needed)
+- API mode: WeChat Official Account API → create draft directly (recommended)
+- Browser mode: Chrome CDP port 9222 → clipboard paste (fallback, not yet fully implemented)
+- 17 custom CSS layout themes with auto-rotation
+- Signature auto-inject from `~/.content-publisher/signature.html`
+- See [content-publisher](https://github.com/AliceLJY/content-publisher) for setup

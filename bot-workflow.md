@@ -7,8 +7,8 @@
 ## Prerequisites
 
 - [openclaw-worker](https://github.com/AliceLJY/openclaw-worker) Task API running on `host.docker.internal:3456`
-- [Content Alchemy](https://github.com/AliceLJY/content-alchemy) skill installed in Claude Code
-- Chrome running with `--remote-debugging-port=9222` for WeChat publishing
+- [Content Alchemy](https://github.com/AliceLJY/content-alchemy) skill (v5.0, Stages 1-5) installed in Claude Code
+- [Content Publisher](https://github.com/AliceLJY/content-publisher) skill installed in Claude Code (handles image gen, layout, WeChat API publishing)
 - Image generation script at `workspace/scripts/generate-image.mjs`
 
 ## API Call Format
@@ -121,22 +121,9 @@ node /home/node/.openclaw/workspace/scripts/generate-image.mjs \
 
 ---
 
-## Step 3: CC Embeds Images + Publishes
+## Step 3: CC Embeds Images + Publishes via Content Publisher
 
-> 发布前先检查微信登录状态，没登录就停。
-
-### Login Check (mandatory before publish)
-
-**API request:**
-- `timeout`: 60000
-
-**Prompt:**
-```
-检查微信公众号登录状态：用 Playwright 连接 Chrome CDP（localhost:9222），打开 https://mp.weixin.qq.com/ ，截图看是否在登录页还是已登录首页。只返回结果：LOGGED_IN 或 NOT_LOGGED_IN。
-```
-
-- `NOT_LOGGED_IN` → Tell user "微信未登录，需要到电脑上扫码登录后再发布", then **stop**
-- `LOGGED_IN` → Proceed with publish
+> 发布环节由 content-publisher skill 接管（API 模式，不需要 Chrome 登录）。
 
 ### Publish Request
 
@@ -146,19 +133,22 @@ node /home/node/.openclaw/workspace/scripts/generate-image.mjs \
 
 **Prompt template:**
 ```
-继续 Content Alchemy。
+继续。
 
 图片已生成，Mac 本地路径：
 - ~/.openclaw-<botname>/workspace/images/{slug}/IMAGE_COVER.png
 - ~/.openclaw-<botname>/workspace/images/{slug}/IMAGE_1.png
 （list all images）
 
-请执行：
+请执行 /content-publisher：
 1. 将图片复制到文章目录 {article_path} 的 images/ 子目录
 2. 把文章中的 {{IMAGE_COVER}} {{IMAGE_1}} 等占位符替换为 ![](images/filename.png)
-3. 执行 Stage 6 发布到微信公众号
-4. 发布完成后执行 Stage 7 清理（mv 到 Trash）
+3. 选择排版主题（自动轮换），生成排版 HTML
+4. 通过微信公众号 API 发布草稿
+5. 发布完成后归档清理（mv 到 Trash）
 ```
+
+> **Note**: Content Publisher uses WeChat Official Account API (pure HTTP), no Chrome CDP login needed. See [content-publisher](https://github.com/AliceLJY/content-publisher) for API setup.
 
 ---
 
@@ -169,7 +159,7 @@ node /home/node/.openclaw/workspace/scripts/generate-image.mjs \
 | 1 | **Bot is dispatcher** | Articles are written by CC, not the bot |
 | 2 | **Confirm angle first** | Step 1.5 — wait for user mobile confirmation |
 | 3 | **Auto-rotate styles + nano** | Style rotation and nano prompt enhancement are bundled — always both, never skip nano |
-| 4 | **Check login before publish** | No login = stop immediately, save quota |
+| 4 | **API mode for publishing** | Content Publisher uses WeChat API, no Chrome login needed |
 | 5 | **No auto-retry on failure** | Tell user, let them decide |
 | 6 | **Always set callbackContainer** | Prevents callbacks going to wrong bot |
 | 7 | **Preserve sessionId** | Step 3 must carry Step 1's sessionId |

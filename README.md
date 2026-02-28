@@ -50,7 +50,7 @@ Instead of dispatching to Claude Code, the bot calls the Worker's `/tasks` endpo
 POST /tasks → { "command": "cp images && sed -i '' 's|{{IMAGE_COVER}}|![](images/IMAGE_COVER.png)|g' article.md" }
 
 # Step 2: Run publish script
-POST /tasks → { "command": "bun baoyu-post-to-wechat/scripts/wechat-article.ts --markdown article.md --theme grace" }
+POST /tasks → { "command": "bun content-publisher/scripts/publish-wechat.ts --markdown article.md --theme grace" }
 
 # Step 3: Cleanup
 POST /tasks → { "command": "mv article-dir ~/.Trash/" }
@@ -136,8 +136,9 @@ See [style-catalog.md](style-catalog.md) for the full list with prompt suffixes.
 | OpenClaw bot | Discord bot framework | [openclaw](https://github.com/openclaw/openclaw) |
 | openclaw-worker | Task API bridge (CC ↔ Bot) | [openclaw-worker](https://github.com/AliceLJY/openclaw-worker) |
 | openclaw-cc-pipeline | Multi-turn CC orchestration skill (Mode A/B only) | [openclaw-cc-pipeline](https://github.com/AliceLJY/openclaw-cc-pipeline) |
-| Content Alchemy | Article writing skill for Claude Code (Mode A/B only) | [content-alchemy](https://github.com/AliceLJY/content-alchemy) |
-| Chrome + CDP | WeChat publishing automation | Port 9222 debug mode |
+| Content Alchemy | Article writing skill for Claude Code, 5-stage pipeline v5.0 (Mode A/B only) | [content-alchemy](https://github.com/AliceLJY/content-alchemy) |
+| Content Publisher | Image generation + layout + WeChat API publishing (all modes) | [content-publisher](https://github.com/AliceLJY/content-publisher) |
+| Chrome + CDP | Gemini image gen fallback + browser-mode publishing (optional) | Port 9222 debug mode |
 
 ## Quick Start
 
@@ -172,7 +173,8 @@ See [style-catalog.md](style-catalog.md) for the full list with prompt suffixes.
 
 | Project | What It Does |
 |---------|-------------|
-| [content-alchemy](https://github.com/AliceLJY/content-alchemy) | 7-stage content pipeline skill — the core workflow engine |
+| [content-alchemy](https://github.com/AliceLJY/content-alchemy) | 5-stage writing pipeline skill (v5.0) — from topic mining to polished article |
+| [content-publisher](https://github.com/AliceLJY/content-publisher) | Image generation, layout formatting, and WeChat API publishing |
 | [openclaw-cc-bridge](https://github.com/AliceLJY/openclaw-cc-bridge) | Discord commands → Claude Code bridge (zero agent tokens) |
 | [digital-clone-skill](https://github.com/AliceLJY/digital-clone-skill) | Extract writing DNA to personalize your content voice |
 
@@ -184,7 +186,7 @@ Built by **小试AI** ([@AliceLJY](https://github.com/AliceLJY)) · WeChat: **�
 
 Six content pillars: **Hands-on AI** · **AI Pitfall Diaries** · **AI & Humanity** · **AI Cold Eye** · **AI Musings** · **AI Visual Notes**
 
-Open-source byproducts: [content-alchemy](https://github.com/AliceLJY/content-alchemy) · [openclaw-worker](https://github.com/AliceLJY/openclaw-worker) · [openclaw-cc-pipeline](https://github.com/AliceLJY/openclaw-cc-pipeline) · [openclaw-content-alchemy](https://github.com/AliceLJY/openclaw-content-alchemy) · [openclaw-cc-bridge](https://github.com/AliceLJY/openclaw-cc-bridge) · [digital-clone-skill](https://github.com/AliceLJY/digital-clone-skill)
+Open-source byproducts: [content-alchemy](https://github.com/AliceLJY/content-alchemy) · [content-publisher](https://github.com/AliceLJY/content-publisher) · [openclaw-worker](https://github.com/AliceLJY/openclaw-worker) · [openclaw-cc-pipeline](https://github.com/AliceLJY/openclaw-cc-pipeline) · [openclaw-content-alchemy](https://github.com/AliceLJY/openclaw-content-alchemy) · [openclaw-cc-bridge](https://github.com/AliceLJY/openclaw-cc-bridge) · [digital-clone-skill](https://github.com/AliceLJY/digital-clone-skill)
 
 <img src="./assets/wechat_qr.jpg" width="200" alt="WeChat QR Code">
 
