@@ -1,4 +1,13 @@
-# OpenClaw Content Alchemy
+# OpenClaw Content Alchemy (Archived)
+
+> **This project has been archived.** The content pipeline functionality is now handled by:
+> - **[content-alchemy](https://github.com/AliceLJY/content-alchemy)** — 5-stage writing pipeline (Stage 1-5)
+> - **[content-publisher](https://github.com/AliceLJY/content-publisher)** — Image generation, layout formatting, and WeChat API publishing
+> - **[openclaw-cli-bridge](https://github.com/AliceLJY/openclaw-cli-bridge)** — Discord command dispatch with multi-turn session management
+>
+> **本项目已归档。** 内容流水线功能已由以上三个仓库分别实现：content-alchemy 负责写作，content-publisher 负责配图排版发布，cli-bridge 负责 Discord 调度。
+
+---
 
 > Turn your OpenClaw bot into a content publishing pipeline — from idea to WeChat article, fully automated.
 >
