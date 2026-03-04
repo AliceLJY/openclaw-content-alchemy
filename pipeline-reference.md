@@ -11,7 +11,7 @@
 | **content-alchemy** | Claude Code skill for article writing (5-stage pipeline, v5.0) | [GitHub](https://github.com/AliceLJY/content-alchemy) |
 | **content-publisher** | Image generation, layout formatting, and WeChat publishing pipeline | [GitHub](https://github.com/AliceLJY/content-publisher) |
 | **openclaw-worker** | Task API bridge between Discord bot and local Claude Code | [GitHub](https://github.com/AliceLJY/openclaw-worker) |
-| **openclaw-cc-pipeline** | Multi-turn Claude Code orchestration skill — the core pattern: Bot dispatches → Task API relays → Worker runs → CC executes → Callback delivers result. Install as a Claude Code skill for session persistence and multi-round workflows | [GitHub](https://github.com/AliceLJY/openclaw-cc-pipeline) |
+| **openclaw-cli-pipeline** | Multi-turn Claude Code orchestration skill — the core pattern: Bot dispatches → Task API relays → Worker runs → CC executes → Callback delivers result. Install as a Claude Code skill for session persistence and multi-round workflows | [GitHub](https://github.com/AliceLJY/openclaw-cli-pipeline) |
 
 ## Key Infrastructure
 
